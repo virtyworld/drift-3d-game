@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-     public WheelCollider frontLeftWheelCollider;
+    public WheelCollider frontLeftWheelCollider;
     public WheelCollider frontRightWheelCollider;
     public WheelCollider rearLeftWheelCollider;
     public WheelCollider rearRightWheelCollider;
@@ -11,6 +11,8 @@ public class CarController : MonoBehaviour
     public Transform frontRightWheelMesh;
     public Transform rearLeftWheelMesh;
     public Transform rearRightWheelMesh;
+    
+    public Transform spoiler;
 
     public float motorTorque = 1500f;
     public float maxSteeringAngle = 30f;
