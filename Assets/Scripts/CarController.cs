@@ -19,9 +19,20 @@ public class CarController : MonoBehaviour
     private float driftPoints = 0f;
     public Rigidbody rb; // Объект Rigidbody вашей машины
     
+   
+ 
+    
     void Start()
     {
-        rb = GetComponent<Rigidbody>(); // Получаем компонент Rigidbody при старте объекта
+        // Получаем текущие параметры сцепления задних колес
+        WheelFrictionCurve rearFriction = rearLeftWheelCollider.sidewaysFriction;
+
+        // Меняем значение stiffness (коэффициента сцепления)
+        rearFriction.stiffness = 2; // Здесь newValue - новое значение коэффициента сцепления
+
+        // Применяем новое значение к задним колесам
+        rearLeftWheelCollider.sidewaysFriction = rearFriction;
+        rearRightWheelCollider.sidewaysFriction = rearFriction;
     }
 
     private void FixedUpdate()
@@ -62,6 +73,11 @@ public class CarController : MonoBehaviour
             rearFriction.stiffness = Mathf.Lerp(0.1f, 2f, slipCoefficient); // Изменение stiffness
             rearLeftWheelCollider.sidewaysFriction = rearFriction;
             rearRightWheelCollider.sidewaysFriction = rearFriction;
+
+            if (Mathf.Abs(angleToFuturePosition) > 20f)
+            {
+                driftPoints++;
+            }
         }
         else
         {
@@ -71,6 +87,7 @@ public class CarController : MonoBehaviour
             rearLeftWheelCollider.sidewaysFriction = rearFriction;
             rearRightWheelCollider.sidewaysFriction = rearFriction;
         }
+        Debug.Log(driftPoints);
     }
 
     private void UpdateWheelMesh(WheelCollider collider, Transform mesh)

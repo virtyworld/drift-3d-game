@@ -560,18 +560,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 906e67531fceb0d4b9684b65a699c6f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wheelColliders:
-  - {fileID: 2716459193614891142}
-  - {fileID: 4795950753765878369}
-  - {fileID: 3145262460232535540}
-  - {fileID: 1057494946909100755}
+  frontLeftWheelCollider: {fileID: 2716459193614891142}
+  frontRightWheelCollider: {fileID: 4795950753765878369}
+  rearLeftWheelCollider: {fileID: 3145262460232535540}
+  rearRightWheelCollider: {fileID: 1057494946909100755}
+  frontLeftWheelMesh: {fileID: 3794951908810334882}
+  frontRightWheelMesh: {fileID: 948405438201742482}
+  rearLeftWheelMesh: {fileID: 9188640840458259854}
+  rearRightWheelMesh: {fileID: 28636839611146925}
+  motorTorque: 1500
   maxSteeringAngle: 30
-  motorForce: 50
-  brakeForce: 50
-  driftFactor: 0.95
-  maxSpeed: 100
-  driftPoints: 0
-  driftPointsMultiplier: 1
+  rb: {fileID: 7495443279060062592}
 --- !u!1 &3962000127133956386
 GameObject:
   m_ObjectHideFlags: 0
