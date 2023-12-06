@@ -17,8 +17,8 @@ public enum CarName
 public enum PlayerPrefsVariables
 {
     playerChoosedCar,
-    car2,
-    car3
+    voume,
+    playerChoosedTrack
 }
 public enum CarColor
 {

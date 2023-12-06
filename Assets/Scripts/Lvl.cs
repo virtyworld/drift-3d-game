@@ -5,24 +5,29 @@ using UnityEngine;
 
 public class Lvl : MonoBehaviour
 {
-    [SerializeField] private CarController _carControllerPrefab;
+    [SerializeField] private CarController[] _carControllerPrefabs;
     [SerializeField]  public TextMeshProUGUI countdownText;
+    [SerializeField]  public TextMeshProUGUI pointText;
     [SerializeField]  public CameraFollow _cameraFollow;
+    [SerializeField]  public Transform trackDir;
+    [SerializeField]  public GameObject[] maps;
     
     private float countdownTimer = 5f; // Отсчёт в 5 секунд перед началом игры
     private float gameTimer = 120f; // 2 минуты игрового времени
     private bool gameStarted = false;
-
+    private bool isControlEnabled = true;
     private CarController _carController;
+
+    public bool IsControlEnabled => isControlEnabled;
+    
     void Start()
     {
-        _carController =  Instantiate(_carControllerPrefab);
-        _carController.enabled = false;
-        _cameraFollow.target = _carController.transform;
+        InitMap();
+        InitCar();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (!gameStarted)
         {
@@ -49,8 +54,39 @@ public class Lvl : MonoBehaviour
             
             if (gameTimer <= 0f)
             {
-                // Время вышло, выполните необходимые действия
+                StopCarMovement();
+                DisableCarControl();
             }
         }
+    }
+
+    private void InitMap()
+    {
+       int map =  PlayerPrefs.GetInt(PlayerPrefsVariables.playerChoosedTrack.ToString(), 0);
+       Instantiate(maps[map],trackDir);
+    }
+    private void InitCar()
+    {
+        int car =  PlayerPrefs.GetInt(PlayerPrefsVariables.playerChoosedCar.ToString(), 0);
+        _carController =  Instantiate(_carControllerPrefabs[car],trackDir);
+        _carController.Setup(this);
+        _carController.enabled = false;
+        _cameraFollow.target = _carController.transform;
+    }
+    private void StopCarMovement()
+    {
+        if (_carController != null)
+        {
+            _carController.rb.velocity = Vector3.zero; // Обнуляем скорость машины
+            _carController.rb.angularVelocity = Vector3.zero; // Обнуляем угловую скорость машины (повороты)
+        }
+    }
+
+    // Отключить управление машиной
+    private void DisableCarControl()
+    {
+        isControlEnabled = false; // Помечаем, что управление отключено
+        // Здесь можно добавить логику отключения управления машиной,
+        // например, отключение скриптов, отвечающих за управление
     }
 }

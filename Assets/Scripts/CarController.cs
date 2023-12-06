@@ -17,13 +17,16 @@ public class CarController : MonoBehaviour
     public float motorTorque = 1500f;
     public float maxSteeringAngle = 30f;
 
-    private bool isDrifting = false;
     private float driftPoints = 0f;
+    
     public Rigidbody rb; // Объект Rigidbody вашей машины
-    
-   
- 
-    
+
+    private Lvl _lvl;
+    public void Setup(Lvl lvl)
+    {
+        _lvl=lvl;
+    }
+
     void Start()
     {
         // Получаем текущие параметры сцепления задних колес
@@ -39,7 +42,9 @@ public class CarController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float motor = Input.GetAxis("Vertical") * motorTorque;
+        if (_lvl!=null && _lvl.IsControlEnabled)
+        { 
+            float motor = Input.GetAxis("Vertical") * motorTorque;
         float steering = Input.GetAxis("Horizontal") * maxSteeringAngle;
 
         // Apply motor torque to wheels
@@ -80,6 +85,7 @@ public class CarController : MonoBehaviour
             {
                 driftPoints++;
             }
+            ShowDriftPoints(driftPoints.ToString());
         }
         else
         {
@@ -88,8 +94,11 @@ public class CarController : MonoBehaviour
             rearFriction.stiffness = 2f; // Верните stiffness к обычному значению
             rearLeftWheelCollider.sidewaysFriction = rearFriction;
             rearRightWheelCollider.sidewaysFriction = rearFriction;
+            HideDriftPoints();
         }
         Debug.Log(driftPoints);
+       
+        }
     }
 
     private void UpdateWheelMesh(WheelCollider collider, Transform mesh)
@@ -117,7 +126,15 @@ public class CarController : MonoBehaviour
         return predictedPositionWithRotation;
     }
 
-
+    private void ShowDriftPoints(string text)
+    {
+        _lvl.pointText.gameObject.SetActive(true);
+        _lvl.pointText.text = text;
+    }
+    private void HideDriftPoints()
+    {
+        _lvl.gameObject.SetActive(false);
+    }
 }
 
 
