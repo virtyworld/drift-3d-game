@@ -11,6 +11,7 @@ public class Customization : MonoBehaviour
 
    private Vector3 cameraPos;
    private Quaternion cameraRot;
+   
    private void Start()
    {
       redColorButton.onClick.AddListener(() => ChangeColor(CarColor.red));
@@ -29,7 +30,7 @@ public class Customization : MonoBehaviour
    {
       GameObject go = GetCurrentCar();
 
-      CarController carController = go.GetComponent<CarController>();
+      CarCustomize carController = go.GetComponent<CarCustomize>();
       
       if (carController != null)
       {

@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8512705907725283443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3741082554747970204}
+  - component: {fileID: 4630280954085304749}
+  m_Layer: 0
+  m_Name: Lvl
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3741082554747970204
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8512705907725283443}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -4.292}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4630280954085304749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8512705907725283443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2e32df476c1eb643a468fdaf7e2da4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _carControllerPrefabs:
+  - {fileID: 5610215379134294739, guid: e9be6b9d71ce20345b55b654f6eca5d9, type: 3}
+  - {fileID: 4895237413534538303, guid: 4d1624804e8167f479ab63c5302ff1d5, type: 3}
+  - {fileID: 8847042565151870271, guid: 62010132604e8c94d96b4cb4fe6d3394, type: 3}
+  - {fileID: 812440412716750409, guid: 8a8f57edf3523624eb9f886833e8e97a, type: 3}
+  countdownText: {fileID: 0}
+  pointText: {fileID: 0}
+  _cameraFollow: {fileID: 0}
+  trackDir: {fileID: 3741082554747970204}
+  maps:
+  - {fileID: 5661700378922077426, guid: 25a54f919c9982447bb598578889ab25, type: 3}
+  - {fileID: 1059607829265986781, guid: 5fdb11625ba843e4493cfd2adcf33031, type: 3}
+  - {fileID: 2942295650777807255, guid: 918fc0cb2c890fe46a84bc3ba5b89f9a, type: 3}

@@ -1,7 +1,10 @@
+using Photon.Pun;
 using UnityEngine;
 
-public class CarController : MonoBehaviour
+public class CarController : MonoBehaviourPunCallbacks, IPunObservable
 {
+    [SerializeField] public GameObject PlayerUiPrefab;
+    public PhotonView photonView;
     public WheelCollider frontLeftWheelCollider;
     public WheelCollider frontRightWheelCollider;
     public WheelCollider rearLeftWheelCollider;
@@ -11,20 +14,33 @@ public class CarController : MonoBehaviour
     public Transform frontRightWheelMesh;
     public Transform rearLeftWheelMesh;
     public Transform rearRightWheelMesh;
-    
+
     public Transform spoiler;
 
     public float motorTorque = 1500f;
     public float maxSteeringAngle = 30f;
 
     private float driftPoints = 0f;
-    
+
     public Rigidbody rb; // Объект Rigidbody вашей машины
 
     private Lvl _lvl;
+
     public void Setup(Lvl lvl)
     {
-        _lvl=lvl;
+        _lvl = lvl;
+    }
+
+    private void Awake()
+    {
+        if (photonView.IsMine)
+        {
+            PlayerManager.LocalPlayerInstance = this.gameObject;
+        }
+
+        // #Critical
+        // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
+        DontDestroyOnLoad(this.gameObject);
     }
 
     void Start()
@@ -38,67 +54,89 @@ public class CarController : MonoBehaviour
         // Применяем новое значение к задним колесам
         rearLeftWheelCollider.sidewaysFriction = rearFriction;
         rearRightWheelCollider.sidewaysFriction = rearFriction;
+        PhotonStartLogic();
     }
 
     private void FixedUpdate()
     {
-        if (_lvl!=null && _lvl.IsControlEnabled)
-        { 
-            float motor = Input.GetAxis("Vertical") * motorTorque;
-        float steering = Input.GetAxis("Horizontal") * maxSteeringAngle;
-
-        // Apply motor torque to wheels
-        rearLeftWheelCollider.motorTorque = motor;
-        rearRightWheelCollider.motorTorque = motor;
-
-        // Apply steering angle to front wheels
-        frontLeftWheelCollider.steerAngle = steering;
-        frontRightWheelCollider.steerAngle = steering;
-
-        // Rotate wheel meshes
-        UpdateWheelMesh(frontLeftWheelCollider, frontLeftWheelMesh);
-        UpdateWheelMesh(frontRightWheelCollider, frontRightWheelMesh);
-        UpdateWheelMesh(rearLeftWheelCollider, rearLeftWheelMesh);
-        UpdateWheelMesh(rearRightWheelCollider, rearRightWheelMesh);
-
-        if (Input.GetKey(KeyCode.Space))
+        Debug.Log(_lvl);
+        Debug.Log(_lvl.IsControlEnabled);
+        if (_lvl != null && _lvl.IsControlEnabled)
         {
-            float timeInSeconds = 1f; // Время через 1 секунду для примера
+            float motor = Input.GetAxis("Vertical") * motorTorque;
+            float steering = Input.GetAxis("Horizontal") * maxSteeringAngle;
 
-            Vector3 futurePosition = PredictFuturePosition(timeInSeconds);
+            // Apply motor torque to wheels
+            rearLeftWheelCollider.motorTorque = motor;
+            rearRightWheelCollider.motorTorque = motor;
 
-            // Вычисление угла поворота задних колес к предсказанной позиции
-            Vector3 directionToFuturePosition = (futurePosition - transform.position).normalized;
-            float angleToFuturePosition = Vector3.SignedAngle(transform.forward, directionToFuturePosition, transform.up);
+            // Apply steering angle to front wheels
+            frontLeftWheelCollider.steerAngle = steering;
+            frontRightWheelCollider.steerAngle = steering;
 
-            // Определение коэффициента скольжения в зависимости от угла
-            float maxSlipAngle = 360; // Максимальный угол для скольжения
-            float slipCoefficient = Mathf.Clamp01(Mathf.Abs(angleToFuturePosition) / maxSlipAngle);
+            // Rotate wheel meshes
+            UpdateWheelMesh(frontLeftWheelCollider, frontLeftWheelMesh);
+            UpdateWheelMesh(frontRightWheelCollider, frontRightWheelMesh);
+            UpdateWheelMesh(rearLeftWheelCollider, rearLeftWheelMesh);
+            UpdateWheelMesh(rearRightWheelCollider, rearRightWheelMesh);
 
-            // Эмуляция скольжения задних колес по углу
-            WheelFrictionCurve rearFriction = rearLeftWheelCollider.sidewaysFriction;
-            rearFriction.stiffness = Mathf.Lerp(0.1f, 2f, slipCoefficient); // Изменение stiffness
-            rearLeftWheelCollider.sidewaysFriction = rearFriction;
-            rearRightWheelCollider.sidewaysFriction = rearFriction;
-
-            if (Mathf.Abs(angleToFuturePosition) > 20f)
+            if (Input.GetKey(KeyCode.Space))
             {
-                driftPoints++;
+                float timeInSeconds = 1f; // Время через 1 секунду для примера
+
+                Vector3 futurePosition = PredictFuturePosition(timeInSeconds);
+
+                // Вычисление угла поворота задних колес к предсказанной позиции
+                Vector3 directionToFuturePosition = (futurePosition - transform.position).normalized;
+                float angleToFuturePosition =
+                    Vector3.SignedAngle(transform.forward, directionToFuturePosition, transform.up);
+
+                // Определение коэффициента скольжения в зависимости от угла
+                float maxSlipAngle = 360; // Максимальный угол для скольжения
+                float slipCoefficient = Mathf.Clamp01(Mathf.Abs(angleToFuturePosition) / maxSlipAngle);
+
+                // Эмуляция скольжения задних колес по углу
+                WheelFrictionCurve rearFriction = rearLeftWheelCollider.sidewaysFriction;
+                rearFriction.stiffness = Mathf.Lerp(0.1f, 2f, slipCoefficient); // Изменение stiffness
+                rearLeftWheelCollider.sidewaysFriction = rearFriction;
+                rearRightWheelCollider.sidewaysFriction = rearFriction;
+
+                if (Mathf.Abs(angleToFuturePosition) > 20f)
+                {
+                    driftPoints++;
+                }
+
+                ShowDriftPoints(driftPoints.ToString());
             }
-            ShowDriftPoints(driftPoints.ToString());
+            else
+            {
+                // Возвращение стандартных параметров для передачи движения на задние колеса
+                WheelFrictionCurve rearFriction = rearLeftWheelCollider.sidewaysFriction;
+                rearFriction.stiffness = 2f; // Верните stiffness к обычному значению
+                rearLeftWheelCollider.sidewaysFriction = rearFriction;
+                rearRightWheelCollider.sidewaysFriction = rearFriction;
+                HideDriftPoints();
+            }
+
+            Debug.Log(driftPoints);
+        }
+    }
+
+    private void PhotonStartLogic()
+    {
+        if (PlayerUiPrefab != null)
+        {
+            GameObject _uiGo = Instantiate(PlayerUiPrefab);
+            _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
         }
         else
         {
-            // Возвращение стандартных параметров для передачи движения на задние колеса
-            WheelFrictionCurve rearFriction = rearLeftWheelCollider.sidewaysFriction;
-            rearFriction.stiffness = 2f; // Верните stiffness к обычному значению
-            rearLeftWheelCollider.sidewaysFriction = rearFriction;
-            rearRightWheelCollider.sidewaysFriction = rearFriction;
-            HideDriftPoints();
+            Debug.LogWarning("<Color=Red><a>Missing</a></Color> PlayerUiPrefab reference on player Prefab.", this);
         }
-        Debug.Log(driftPoints);
-       
-        }
+#if UNITY_5_4_OR_NEWER
+// Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+#endif
     }
 
     private void UpdateWheelMesh(WheelCollider collider, Transform mesh)
@@ -109,6 +147,7 @@ public class CarController : MonoBehaviour
         mesh.position = position;
         mesh.rotation = rotation;
     }
+
     public Vector3 PredictFuturePosition(float time)
     {
         Vector3 currentPosition = transform.position; // Текущая позиция машины
@@ -131,10 +170,45 @@ public class CarController : MonoBehaviour
         _lvl.pointText.gameObject.SetActive(true);
         _lvl.pointText.text = text;
     }
+
     private void HideDriftPoints()
     {
         _lvl.gameObject.SetActive(false);
     }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+    }
+#if UNITY_5_4_OR_NEWER
+    void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
+    {
+        this.CalledOnLevelWasLoaded(scene.buildIndex);
+    }
+#endif
+#if !UNITY_5_4_OR_NEWER
+/// <summary>See CalledOnLevelWasLoaded. Outdated in Unity 5.4.</summary>
+void OnLevelWasLoaded(int level)
+{
+    this.CalledOnLevelWasLoaded(level);
 }
+#endif
+#if UNITY_5_4_OR_NEWER
+    public override void OnDisable()
+    {
+        // Always call the base to remove callbacks
+        base.OnDisable();
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+#endif
+    void CalledOnLevelWasLoaded(int level)
+    {
+        // check if we are outside the Arena and if it's the case, spawn around the center of the arena in a safe zone
+        if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
+        {
+            transform.position = new Vector3(0f, 5f, 0f);
+        }
 
-
+        GameObject _uiGo = Instantiate(this.PlayerUiPrefab);
+        _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+    }
+}

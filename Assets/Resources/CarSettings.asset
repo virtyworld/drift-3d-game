@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carData:
   - name: 0
-    prefab: {fileID: 3294564219125457607, guid: 8a8f57edf3523624eb9f886833e8e97a, type: 3}
+    prefab: {fileID: 3294564219125457607, guid: 9923dc07389e74d4cbc37b3432d0af7a, type: 3}
   - name: 1
-    prefab: {fileID: 7720726507797323357, guid: e9be6b9d71ce20345b55b654f6eca5d9, type: 3}
+    prefab: {fileID: 7720726507797323357, guid: 70fe7734523db0046a0d3487160c4ad6, type: 3}
   - name: 2
-    prefab: {fileID: 7282772008711335601, guid: 4d1624804e8167f479ab63c5302ff1d5, type: 3}
+    prefab: {fileID: 7282772008711335601, guid: 3d4c418613689774db02472fb9eb4263, type: 3}
   - name: 3
-    prefab: {fileID: 6645616114513181105, guid: 62010132604e8c94d96b4cb4fe6d3394, type: 3}
+    prefab: {fileID: 6645616114513181105, guid: 416511353143e874b96abcf2439d26be, type: 3}
