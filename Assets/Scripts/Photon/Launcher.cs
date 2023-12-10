@@ -34,6 +34,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     private bool isReadyForRoomOperations;
     private TypedLobby customLobby = new TypedLobby("customLobby", LobbyType.Default);
     private Dictionary<string, RoomInfo> cachedRoomList = new Dictionary<string, RoomInfo>();
+    private bool hasSyncedProperties = false;
 
     void Awake()
     {
@@ -45,12 +46,12 @@ public class Launcher : MonoBehaviourPunCallbacks
         InitializeUI();
         ConnectButtonListeners();
     }
+
+   
     private void InitializeUI()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.AddCallbackTarget(this);
-        progressLabel.SetActive(false);
-        loginPanel.SetActive(true);
     }
     private void ConnectButtonListeners()
     {
@@ -59,6 +60,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         leaveRoom.onClick.AddListener(LeaveRoom);
         loginButton.onClick.AddListener(ConnectButtonOnClick);
     }
+   
     private void ConnectButtonOnClick()
     {
         string playerNickname = playerName.text;
@@ -97,7 +99,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         playerCountText.text = string.Format("Players: {0}/{1}", PhotonNetwork.CurrentRoom.Players.Count, PhotonNetwork.CurrentRoom.MaxPlayers);
 
         if (!PhotonNetwork.IsMasterClient) startGameButton.gameObject.SetActive(false);
-
+        
         UpdatePlayerList();
     }
     
@@ -124,6 +126,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom()
     {
         Debug.Log("Room created successfully!");
+        SetRoomCustomProperties();
         UpdatePlayerList();
     }
     public override void OnJoinedLobby()
@@ -199,8 +202,16 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             gameStarted = true;
             Debug.Log("Starting the game!");
+            HideRoomPanel();
             PhotonNetwork.LoadLevel("Game");
         }
+    }
+    private void SetRoomCustomProperties()
+    {
+        int mapIndex = PlayerPrefs.GetInt(PlayerPrefsVariables.playerChoosedTrack.ToString(), 0);
+        Hashtable customRoomProperties = new Hashtable();
+        customRoomProperties.Add("MapIndex", mapIndex); 
+        PhotonNetwork.CurrentRoom.SetCustomProperties(customRoomProperties);
     }
     private void LeaveRoom()
     {
@@ -255,6 +266,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         Instantiate(playerNamePrefab, playerNameDir);
         playerCountText.text = string.Format("Players: {0}/{1}", playerCount, maxPlayers);
     }
+    
     private void UpdatePlayerList()
     {
         Player[] players = PhotonNetwork.PlayerList;
@@ -288,5 +300,20 @@ public class Launcher : MonoBehaviourPunCallbacks
                 cachedRoomList[info.Name] = info;
             }
         }
+    }
+   
+    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+    {
+        if (propertiesThatChanged.ContainsKey("MapIndex"))
+        {
+            hasSyncedProperties = true;
+        }
+    }
+
+    private void HideRoomPanel()
+    {
+        loginPanel.SetActive(false);
+        createRoomDir.SetActive(false);
+        roomDir.SetActive(false);
     }
 }

@@ -22,7 +22,7 @@ public class CarShop : MonoBehaviour
         grayCarButton.onClick.AddListener(() => SpawnCar(CarName.grayCar));
         purpleCarButton.onClick.AddListener(() => SpawnCar(CarName.purpleCar));
 
-        int selectedCarIndex = PlayerPrefs.GetInt(PlayerPrefsVariables.playerChoosedCar.ToString(), 1);
+        int selectedCarIndex = PlayerPrefs.GetInt(PlayerPrefsVariables.playerChoosenCar.ToString(), 1);
         SpawnCar((CarName)selectedCarIndex);
     }
 
@@ -52,7 +52,7 @@ public class CarShop : MonoBehaviour
 
     private void SavePlayerChoose(int carIndex)
     {
-        PlayerPrefs.SetInt(PlayerPrefsVariables.playerChoosedCar.ToString(), carIndex);
+        PlayerPrefs.SetInt(PlayerPrefsVariables.playerChoosenCar.ToString(), carIndex);
         PlayerPrefs.Save();
     }
 }

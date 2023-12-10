@@ -37,13 +37,13 @@ public class Customization : MonoBehaviour
          switch (color)
          {
             case CarColor.red:
-               carController.frontLeftWheelMesh.GetComponent<MeshRenderer>().material.color = Color.red; // Пример изменения цвета на красный
-               carController.frontRightWheelMesh.GetComponent<MeshRenderer>().material.color = Color.red; // Пример изменения цвета на красный
-               carController.rearLeftWheelMesh.GetComponent<MeshRenderer>().material.color = Color.red; // Пример изменения цвета на красный
-               carController.rearRightWheelMesh.GetComponent<MeshRenderer>().material.color = Color.red; // Пример изменения цвета на красный
+               carController.frontLeftWheelMesh.GetComponent<MeshRenderer>().material.color = Color.red; 
+               carController.frontRightWheelMesh.GetComponent<MeshRenderer>().material.color = Color.red; 
+               carController.rearLeftWheelMesh.GetComponent<MeshRenderer>().material.color = Color.red; 
+               carController.rearRightWheelMesh.GetComponent<MeshRenderer>().material.color = Color.red;
                break;
             case CarColor.black:
-               carController.frontLeftWheelMesh.GetComponent<MeshRenderer>().material.color  = Color.black; // Пример изменения цвета на черный
+               carController.frontLeftWheelMesh.GetComponent<MeshRenderer>().material.color  = Color.black;
                carController.frontRightWheelMesh.GetComponent<MeshRenderer>().material.color  = Color.black;
                carController.rearLeftWheelMesh.GetComponent<MeshRenderer>().material.color  = Color.black;
                carController.rearRightWheelMesh.GetComponent<MeshRenderer>().material.color  = Color.black;
@@ -51,6 +51,7 @@ public class Customization : MonoBehaviour
          }
       }
 
+      SaveColorSettings(color);
       cameraPos = new Vector3(-2f, 1.3f, 2.85f);
       cameraRot = Quaternion.Euler(13.32f, 128.5f, 0f);
    }
@@ -59,12 +60,13 @@ public class Customization : MonoBehaviour
    {
       GameObject go = GetCurrentCar();
 
-      CarController carController = go.GetComponent<CarController>();
+      CarCustomize carController = go.GetComponent<CarCustomize>();
       
       carController.spoiler.gameObject.SetActive(!carController.spoiler.gameObject.activeSelf);
       
       cameraPos = new Vector3(-1.73f, 1.43f, -0.46f);
       cameraRot = Quaternion.Euler(23.6f, 117.58f, 0f);
+      SaveSpoilerSettings(carController.spoiler.gameObject.activeSelf);
    }
 
    private GameObject GetCurrentCar()
@@ -77,12 +79,23 @@ public class Customization : MonoBehaviour
       if (Camera.main.transform.position == cameraPos &&
           Camera.main.transform.rotation == cameraRot)
       {
-         // Если камера уже в нужной позиции и повороте, ничего не делать
          return;
       }
       Vector3 smoothedPosition = Vector3.Lerp(Camera.main.transform.position, cameraPos, 0.125f);
       Camera.main.transform.position = smoothedPosition;
       Quaternion smoothedRotation = Quaternion.Lerp(Camera.main.transform.rotation, cameraRot, 0.125f);
       Camera.main.transform.rotation = smoothedRotation;
+   }
+
+   private void SaveSpoilerSettings(bool isActive)
+   {
+      int spoiler = isActive == true ? 1 : 0;
+      PlayerPrefs.SetInt(PlayerPrefsVariables.playerSpoilerChoosen.ToString(), spoiler);
+      PlayerPrefs.Save();
+   }
+   private void SaveColorSettings(CarColor color)
+   {
+      PlayerPrefs.SetInt(PlayerPrefsVariables.playerColorChoosen.ToString(), (int)color);
+      PlayerPrefs.Save();
    }
 }

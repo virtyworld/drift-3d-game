@@ -495,7 +495,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2792218741957914664}
   - component: {fileID: 7495443279060062592}
-  - component: {fileID: 795692899628916252}
   m_Layer: 0
   m_Name: Free Racing Car
   m_TagString: Untagged
@@ -548,30 +547,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &795692899628916252
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3311311803080157842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 906e67531fceb0d4b9684b65a699c6f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  frontLeftWheelCollider: {fileID: 2716459193614891142}
-  frontRightWheelCollider: {fileID: 4795950753765878369}
-  rearLeftWheelCollider: {fileID: 3145262460232535540}
-  rearRightWheelCollider: {fileID: 1057494946909100755}
-  frontLeftWheelMesh: {fileID: 3794951908810334882}
-  frontRightWheelMesh: {fileID: 948405438201742482}
-  rearLeftWheelMesh: {fileID: 9188640840458259854}
-  rearRightWheelMesh: {fileID: 28636839611146925}
-  spoiler: {fileID: 7096574665496613375}
-  motorTorque: 1500
-  maxSteeringAngle: 30
-  rb: {fileID: 7495443279060062592}
 --- !u!1 &3962000127133956386
 GameObject:
   m_ObjectHideFlags: 0

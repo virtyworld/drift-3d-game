@@ -1,3 +1,5 @@
+using ExitGames.Client.Photon;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,14 +13,12 @@ public class SelectLevel : MonoBehaviour
     private void Start()
     {
         currentTrack = PlayerPrefs.GetInt(PlayerPrefsVariables.playerChoosedTrack.ToString(), 0);
-        Debug.Log(currentTrack);
         tracks[currentTrack].isOn = true;
 
         for (int i = 0; i < tracks.Length; i++)
         {
             int trackIndex = i;
             tracks[i].onValueChanged.AddListener((x) => { if (x) SelectTrack(trackIndex); });
-            Debug.Log(i);
         }
 
         trackButtonPanel.SetActive(false);
@@ -26,8 +26,14 @@ public class SelectLevel : MonoBehaviour
 
     private void SelectTrack(int value)
     {
-        Debug.Log(value);
         PlayerPrefs.SetInt(PlayerPrefsVariables.playerChoosedTrack.ToString(), value);
         PlayerPrefs.Save();
+        SetRoomCustomProperties(value);
+    }
+    private void SetRoomCustomProperties(int index)
+    {
+        Hashtable customRoomProperties = new Hashtable();
+        customRoomProperties.Add("MapIndex", index);
+        if (PhotonNetwork.CurrentRoom!=null)PhotonNetwork.CurrentRoom.SetCustomProperties(customRoomProperties);
     }
 }

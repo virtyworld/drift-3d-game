@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Garage : MonoBehaviour
@@ -9,7 +7,7 @@ public class Garage : MonoBehaviour
     [Header("Button-Panel Pairs")]
     [SerializeField] private List<ButtonPanelPair> buttonPanelPairs;
     [SerializeField] private CarShop carShop;
-
+    
     private Dictionary<Button, GameObject> buttonPanelMap = new Dictionary<Button, GameObject>();
 
     public CarShop CarShop => carShop;
@@ -35,25 +33,10 @@ public class Garage : MonoBehaviour
         Camera.main.transform.rotation = Quaternion.Euler(13.32f, 128.5f, 0f);
     }
 
-    public void Play()
-    {
-        SceneManager.LoadScene(2);
-    }
     public void Exit()
     {
         Application.Quit();
     }
 }
 
-[Serializable]
-public struct CarData
-{
-    public CarName name;
-    public GameObject prefab;
-}
-[Serializable]
-public class ButtonPanelPair
-{
-    public Button button;
-    public GameObject panel;
-}
+

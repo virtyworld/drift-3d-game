@@ -14,16 +14,14 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
     public Transform frontRightWheelMesh;
     public Transform rearLeftWheelMesh;
     public Transform rearRightWheelMesh;
-
+    public Rigidbody rb; 
     public Transform spoiler;
-
-    public float motorTorque = 1500f;
+    public float motorTorque = 3000f;
+    public float brakeTorque = 500f; 
+    
     public float maxSteeringAngle = 30f;
-
+    private bool isAccelerating = false;
     private float driftPoints = 0f;
-
-    public Rigidbody rb; // Объект Rigidbody вашей машины
-
     private Lvl _lvl;
 
     public void Setup(Lvl lvl)
@@ -38,43 +36,55 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
             PlayerManager.LocalPlayerInstance = this.gameObject;
         }
 
-        // #Critical
-        // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
         DontDestroyOnLoad(this.gameObject);
     }
 
     void Start()
     {
-        // Получаем текущие параметры сцепления задних колес
         WheelFrictionCurve rearFriction = rearLeftWheelCollider.sidewaysFriction;
-
-        // Меняем значение stiffness (коэффициента сцепления)
-        rearFriction.stiffness = 2; // Здесь newValue - новое значение коэффициента сцепления
-
-        // Применяем новое значение к задним колесам
+        rearFriction.stiffness = 2;
         rearLeftWheelCollider.sidewaysFriction = rearFriction;
         rearRightWheelCollider.sidewaysFriction = rearFriction;
+        
         PhotonStartLogic();
     }
-
-    private void FixedUpdate()
+    void Update()
     {
-        Debug.Log(_lvl);
-        Debug.Log(_lvl.IsControlEnabled);
-        if (_lvl != null && _lvl.IsControlEnabled)
+        if (photonView.IsMine && _lvl != null && _lvl.IsControlEnabled)
+        {
+            isAccelerating = Input.GetKey(KeyCode.W);
+        }
+    }
+    private void FixedUpdate()
+    {//   TODO машина на начинает тормозить при отжатой кнопке w
+        if (photonView.IsMine && _lvl != null && _lvl.IsControlEnabled)
         {
             float motor = Input.GetAxis("Vertical") * motorTorque;
             float steering = Input.GetAxis("Horizontal") * maxSteeringAngle;
 
-            // Apply motor torque to wheels
+            // Применяем моторный момент к задним колесам
             rearLeftWheelCollider.motorTorque = motor;
             rearRightWheelCollider.motorTorque = motor;
 
-            // Apply steering angle to front wheels
+            // Применяем угол поворота к передним колесам
             frontLeftWheelCollider.steerAngle = steering;
             frontRightWheelCollider.steerAngle = steering;
 
-            // Rotate wheel meshes
+            if (Input.GetKey(KeyCode.W))
+            {
+                // Если клавиша W зажата, устанавливаем тормозной момент на 0
+                rearLeftWheelCollider.brakeTorque = 0f;
+                rearRightWheelCollider.brakeTorque = 0f;
+            }
+            else
+            {
+                // Если клавиша W отпущена, сбрасываем моторный момент и применяем тормозной момент
+                rearLeftWheelCollider.brakeTorque = brakeTorque;
+                rearRightWheelCollider.brakeTorque = brakeTorque;
+                rearLeftWheelCollider.motorTorque = 0f;
+                rearRightWheelCollider.motorTorque = 0f;
+            }
+            Debug.Log("Скорость машины: " + rb.velocity.magnitude); 
             UpdateWheelMesh(frontLeftWheelCollider, frontLeftWheelMesh);
             UpdateWheelMesh(frontRightWheelCollider, frontRightWheelMesh);
             UpdateWheelMesh(rearLeftWheelCollider, rearLeftWheelMesh);
@@ -82,7 +92,7 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
 
             if (Input.GetKey(KeyCode.Space))
             {
-                float timeInSeconds = 1f; // Время через 1 секунду для примера
+                float timeInSeconds = 1f; 
 
                 Vector3 futurePosition = PredictFuturePosition(timeInSeconds);
 
@@ -117,8 +127,6 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
                 rearRightWheelCollider.sidewaysFriction = rearFriction;
                 HideDriftPoints();
             }
-
-            Debug.Log(driftPoints);
         }
     }
 
@@ -148,7 +156,7 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
         mesh.rotation = rotation;
     }
 
-    public Vector3 PredictFuturePosition(float time)
+    private Vector3 PredictFuturePosition(float time)
     {
         Vector3 currentPosition = transform.position; // Текущая позиция машины
         Vector3 currentVelocity = rb.velocity; // Текущая скорость машины
@@ -173,7 +181,7 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void HideDriftPoints()
     {
-        _lvl.gameObject.SetActive(false);
+        _lvl.pointText.gameObject.SetActive(false);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
