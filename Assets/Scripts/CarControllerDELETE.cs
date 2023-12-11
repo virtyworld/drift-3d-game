@@ -1,10 +1,7 @@
-using Photon.Pun;
 using UnityEngine;
 
-public class CarController : MonoBehaviourPunCallbacks, IPunObservable
+public class CarControllerDELETE : MonoBehaviour
 {
-    [SerializeField] public GameObject PlayerUiPrefab;
-    public PhotonView photonView;
     public WheelCollider frontLeftWheelCollider;
     public WheelCollider frontRightWheelCollider;
     public WheelCollider rearLeftWheelCollider;
@@ -22,46 +19,27 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
     public float maxSteeringAngle = 30f;
     private float driftPoints = 0f;
     private Lvl _lvl;
-
-    public void Setup(Lvl lvl)
-    {
-        _lvl = lvl;
-    }
-
-    private void Awake()
-    {
-        if (photonView.IsMine)
-        {
-            PlayerManager.LocalPlayerInstance = this.gameObject;
-        }
-
-        DontDestroyOnLoad(this.gameObject);
-    }
-
-    void Start()
+  void Start()
     {
         WheelFrictionCurve rearFriction = rearLeftWheelCollider.sidewaysFriction;
-        rearFriction.stiffness = 1f;
+        rearFriction.stiffness = 0f;
         rearLeftWheelCollider.sidewaysFriction = rearFriction;
         rearRightWheelCollider.sidewaysFriction = rearFriction;
-        
-        PhotonStartLogic();
+        rb.drag = 1f;
     }
-    
+  public float decelerationRate = 10f;
     private void FixedUpdate()
     {
-        if (photonView.IsMine && _lvl != null && _lvl.IsControlEnabled)
-        {
-            float steering = Input.GetAxis("Horizontal") * maxSteeringAngle;
-            float inputVertical = Input.GetAxis("Vertical");
-            float motor = 0f;
+        float steering = Input.GetAxis("Horizontal") * maxSteeringAngle;
+        float inputVertical = Input.GetAxis("Vertical");
+        float motor = 0f;
 
-            if (inputVertical > 0f) {
-                motor = inputVertical * motorTorque; // Moving forward
-            } else if (inputVertical < 0f) {
-                motor = inputVertical * motorTorque * 1f; // Moving backward with reduced torque
-            }
-            
+        if (inputVertical > 0f) {
+            motor = inputVertical * motorTorque; // Moving forward
+        } else if (inputVertical < 0f) {
+            motor = inputVertical * motorTorque * 1f; // Moving backward with reduced torque
+        }
+        
             // Применяем моторный момент к задним колесам
             rearLeftWheelCollider.motorTorque = motor;
             rearRightWheelCollider.motorTorque = motor;
@@ -70,6 +48,8 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
             frontLeftWheelCollider.steerAngle = steering;
             frontRightWheelCollider.steerAngle = steering;
 
+            
+             // Debug.Log("Скорость машины: " + rb.velocity.magnitude); 
             UpdateWheelMesh(frontLeftWheelCollider, frontLeftWheelMesh);
             UpdateWheelMesh(frontRightWheelCollider, frontRightWheelMesh);
             UpdateWheelMesh(rearLeftWheelCollider, rearLeftWheelMesh);
@@ -101,7 +81,6 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
                     driftPoints++;
                 }
 
-                ShowDriftPoints(driftPoints.ToString());
             }
             else
             {
@@ -110,7 +89,6 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
                 rearFriction.stiffness = 1f; // Верните stiffness к обычному значению
                 rearLeftWheelCollider.sidewaysFriction = rearFriction;
                 rearRightWheelCollider.sidewaysFriction = rearFriction;
-                HideDriftPoints();
             }
             
             if (Input.GetAxis("Vertical") > 0)
@@ -137,35 +115,17 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
                 rearRightWheelCollider.motorTorque = 0f;
                 rb.drag = 1f;
             }
-        }
-    }
 
-    private void PhotonStartLogic()
-    {
-        if (PlayerUiPrefab != null)
-        {
-            GameObject _uiGo = Instantiate(PlayerUiPrefab);
-            _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
-        }
-        else
-        {
-            Debug.LogWarning("<Color=Red><a>Missing</a></Color> PlayerUiPrefab reference on player Prefab.", this);
-        }
-#if UNITY_5_4_OR_NEWER
-// Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
-        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
-#endif
-    }
+            // Получаем позицию, куда должна двигаться камера (позиция машины с учетом смещения)
+            Vector3 targetPosition = gameObject.transform.position + new Vector3(0,5,-10);
 
-    private void UpdateWheelMesh(WheelCollider collider, Transform mesh)
-    {
-        Vector3 position;
-        Quaternion rotation;
-        collider.GetWorldPose(out position, out rotation);
-        mesh.position = position;
-        mesh.rotation = rotation;
-    }
+            // Плавно перемещаем позицию камеры к новой позиции
+            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, targetPosition, 0.125f);
 
+            // Направляем камеру на машину
+            Camera.main.transform.LookAt(gameObject.transform); 
+    }
+    
     private Vector3 PredictFuturePosition(float time)
     {
         Vector3 currentPosition = transform.position; // Текущая позиция машины
@@ -182,51 +142,13 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
 
         return predictedPositionWithRotation;
     }
-
-    private void ShowDriftPoints(string text)
+    
+    private void UpdateWheelMesh(WheelCollider collider, Transform mesh)
     {
-        _lvl.pointText.gameObject.SetActive(true);
-        _lvl.pointText.text = text;
-    }
-
-    private void HideDriftPoints()
-    {
-        _lvl.pointText.gameObject.SetActive(false);
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-    }
-#if UNITY_5_4_OR_NEWER
-    void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
-    {
-        this.CalledOnLevelWasLoaded(scene.buildIndex);
-    }
-#endif
-#if !UNITY_5_4_OR_NEWER
-/// <summary>See CalledOnLevelWasLoaded. Outdated in Unity 5.4.</summary>
-void OnLevelWasLoaded(int level)
-{
-    this.CalledOnLevelWasLoaded(level);
-}
-#endif
-#if UNITY_5_4_OR_NEWER
-    public override void OnDisable()
-    {
-        // Always call the base to remove callbacks
-        base.OnDisable();
-        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-#endif
-    void CalledOnLevelWasLoaded(int level)
-    {
-        // check if we are outside the Arena and if it's the case, spawn around the center of the arena in a safe zone
-        if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
-        {
-            transform.position = new Vector3(0f, 5f, 0f);
-        }
-
-        GameObject _uiGo = Instantiate(this.PlayerUiPrefab);
-        _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+        Vector3 position;
+        Quaternion rotation;
+        collider.GetWorldPose(out position, out rotation);
+        mesh.position = position;
+        mesh.rotation = rotation;
     }
 }
