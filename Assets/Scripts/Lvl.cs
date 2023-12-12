@@ -1,6 +1,4 @@
-using ExitGames.Client.Photon;
 using Photon.Pun;
-using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,11 +10,12 @@ public class Lvl : MonoBehaviourPunCallbacks
     [SerializeField] public TextMeshProUGUI countdownText;
     [SerializeField] public TextMeshProUGUI pointText;
     [SerializeField] public Transform trackDir;
+    [SerializeField] public GameObject scorePanel;
     [SerializeField] public GameObject[] maps;
     [SerializeField] public Button leaveButton;
 
     private float countdownTimer = 5f;
-    private float gameTimer = 120f; 
+    private float gameTimer = 5f; 
     private bool gameStarted;
     private bool isControlEnabled;
     private CarController _carController;
@@ -60,6 +59,8 @@ public class Lvl : MonoBehaviourPunCallbacks
             {
                 StopCarMovement();
                 DisableCarControl();
+                ShowScoreTable();
+                countdownText.gameObject.SetActive(false);
             }
         }
     }
@@ -173,5 +174,17 @@ public class Lvl : MonoBehaviourPunCallbacks
         }
     }
     
-   
+    void OnApplicationPause(bool isPaused) {                 
+        IronSource.Agent.onApplicationPause(isPaused);
+    }
+    
+    private void ShowScoreTable()
+    {
+        scorePanel.SetActive(true);
+    }
+
+    public void MultiplyPoints()
+    {
+        pointText.text = (_carController.DriftPoints * 2f).ToString();
+    }
 }

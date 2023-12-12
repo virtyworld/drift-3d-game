@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerUiPrefab: {fileID: 5641663537039776809, guid: fe57e4ed30454684fabb4cc2a593cfcf, type: 3}
-  photonView: {fileID: 7101645366964691542}
+  photonViewScript: {fileID: 7101645366964691542}
   frontLeftWheelCollider: {fileID: 7878892768972602533}
   frontRightWheelCollider: {fileID: 750726510976462402}
   rearLeftWheelCollider: {fileID: 7152711881538079191}

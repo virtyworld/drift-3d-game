@@ -4,7 +4,7 @@ using UnityEngine;
 public class CarController : MonoBehaviourPunCallbacks, IPunObservable
 {
     [SerializeField] public GameObject PlayerUiPrefab;
-    public PhotonView photonView;
+    public PhotonView photonViewScript;
     public WheelCollider frontLeftWheelCollider;
     public WheelCollider frontRightWheelCollider;
     public WheelCollider rearLeftWheelCollider;
@@ -23,6 +23,9 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
     private float driftPoints = 0f;
     private Lvl _lvl;
 
+
+    public float DriftPoints => driftPoints;
+    
     public void Setup(Lvl lvl)
     {
         _lvl = lvl;
@@ -30,7 +33,7 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Awake()
     {
-        if (photonView.IsMine)
+        if (photonViewScript.IsMine)
         {
             PlayerManager.LocalPlayerInstance = this.gameObject;
         }
@@ -50,7 +53,7 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
     
     private void FixedUpdate()
     {
-        if (photonView.IsMine && _lvl != null && _lvl.IsControlEnabled)
+        if (photonViewScript.IsMine && _lvl != null && _lvl.IsControlEnabled)
         {
             float steering = Input.GetAxis("Horizontal") * maxSteeringAngle;
             float inputVertical = Input.GetAxis("Vertical");

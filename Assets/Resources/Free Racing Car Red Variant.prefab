@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerUiPrefab: {fileID: 5641663537039776809, guid: fe57e4ed30454684fabb4cc2a593cfcf, type: 3}
-  photonView: {fileID: 7823474451205716467}
+  photonViewScript: {fileID: 7823474451205716467}
   frontLeftWheelCollider: {fileID: 2737710317085372627}
   frontRightWheelCollider: {fileID: 4810446887963501108}
   rearLeftWheelCollider: {fileID: 3164543666836587937}
@@ -153,10 +153,11 @@ MonoBehaviour:
   frontRightWheelMesh: {fileID: 965434436988013767}
   rearLeftWheelMesh: {fileID: 9207640297257862619}
   rearRightWheelMesh: {fileID: 11607767811549944}
+  rb: {fileID: 7514724142118017493}
   spoiler: {fileID: 7075323475488905642}
   motorTorque: 1500
+  brakeTorque: 500
   maxSteeringAngle: 30
-  rb: {fileID: 7514724142118017493}
 --- !u!114 &5971935751420558160
 MonoBehaviour:
   m_ObjectHideFlags: 0

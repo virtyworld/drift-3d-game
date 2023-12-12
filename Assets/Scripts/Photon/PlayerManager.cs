@@ -8,11 +8,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     public static GameObject LocalPlayerInstance;
     [Tooltip("The Player's UI GameObject Prefab")]
     [SerializeField] public GameObject PlayerUiPrefab;
-    public PhotonView photonView;
+    public PhotonView photonViewScript;
 
     private void Awake()
     {
-        if (photonView.IsMine)
+        if (photonViewScript.IsMine)
         {
             PlayerManager.LocalPlayerInstance = this.gameObject;
         }
@@ -28,7 +28,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks, IPunObservable
 
         if (_cameraWork != null)
         {
-            if (photonView.IsMine)
+            if (photonViewScript.IsMine)
             {
                 _cameraWork.OnStartFollowing();
             }

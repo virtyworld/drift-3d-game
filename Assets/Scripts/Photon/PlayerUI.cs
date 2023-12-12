@@ -68,7 +68,7 @@ public class PlayerUI : MonoBehaviour
         target = _target;
         if (playerNameText != null)
         {
-            playerNameText.text = target.photonView.Owner.NickName;
+            playerNameText.text = target.photonViewScript.Owner.NickName;
         }
         
         targetTransform = this.target.GetComponent<Transform>();
