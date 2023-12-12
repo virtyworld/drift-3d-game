@@ -132,11 +132,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 948405438201742482, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
   m_PrefabInstance: {fileID: 5103039417754662095}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &6948587442945639655 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2792218741957914664, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
-  m_PrefabInstance: {fileID: 5103039417754662095}
-  m_PrefabAsset: {fileID: 0}
 --- !u!146 &7161689254267407433 stripped
 WheelCollider:
   m_CorrespondingSourceObject: {fileID: 2716459193614891142, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
@@ -205,7 +200,7 @@ MonoBehaviour:
   frontRightWheelCollider: {fileID: 314971172518125230}
   rearLeftWheelCollider: {fileID: 7887936941379631419}
   rearRightWheelCollider: {fileID: 5223429399262309916}
-  frontLeftWheelMesh: {fileID: 6948587442945639655}
+  frontLeftWheelMesh: {fileID: 8249402610939958893}
   frontRightWheelMesh: {fileID: 5474348447618658397}
   rearLeftWheelMesh: {fileID: 4131278022277626177}
   rearRightWheelMesh: {fileID: 5094730467380696674}
@@ -232,5 +227,10 @@ MonoBehaviour:
 --- !u!146 &7887936941379631419 stripped
 WheelCollider:
   m_CorrespondingSourceObject: {fileID: 3145262460232535540, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
+  m_PrefabInstance: {fileID: 5103039417754662095}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8249402610939958893 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3794951908810334882, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
   m_PrefabInstance: {fileID: 5103039417754662095}
   m_PrefabAsset: {fileID: 0}

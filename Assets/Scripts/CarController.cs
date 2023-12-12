@@ -124,7 +124,6 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
             }
             else if (Input.GetAxis("Vertical") < 0)
             {
-                Debug.Log(motor);
                 rearLeftWheelCollider.motorTorque = motor;
                 rearRightWheelCollider.motorTorque = motor;
                 rearLeftWheelCollider.brakeTorque = 0f;
@@ -133,7 +132,6 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
             }
             else
             {
-                Debug.Log("3");
                 rearLeftWheelCollider.brakeTorque = brakeTorque;
                 rearRightWheelCollider.brakeTorque = brakeTorque;
                 rearLeftWheelCollider.motorTorque = 0f;
