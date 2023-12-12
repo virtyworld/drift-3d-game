@@ -11,29 +11,22 @@ public class Advertise : MonoBehaviour
     private const string APP_KEY = "1cd38540d";
     private bool isInitialized;
 
-    private void Awake()
-    {
-        IronSource.Agent.init (APP_KEY);
-    }
-
     void Start()
     {
         EventImplement();
-        
+        IronSource.Agent.validateIntegration();
+        IronSource.Agent.init(APP_KEY);
+
         IronSourceConfig.Instance.setClientSideCallbacks (true);
         string id = IronSource.Agent.getAdvertiserId ();
         Debug.Log ("unity-script: IronSource.Agent.getAdvertiserId : " + id);
-        
-        Debug.Log ("unity-script: IronSource.Agent.validateIntegration");
-        IronSource.Agent.validateIntegration ();
 
-
-        IronSource.Agent.loadRewardedVideo();
         getX2Button.onClick.AddListener(LoadAndShowBanner);
         closeAdButton.onClick.AddListener(HideBanner);
     }
     private void EventImplement()
     {
+        IronSourceEvents.onSdkInitializationCompletedEvent += SdkInitializationCompletedEvent;
         IronSourceRewardedVideoEvents.onAdOpenedEvent += RewardedVideoOnAdOpenedEvent;
         IronSourceRewardedVideoEvents.onAdClosedEvent += RewardedVideoOnAdClosedEvent;
         IronSourceRewardedVideoEvents.onAdAvailableEvent += RewardedVideoOnAdAvailable;
@@ -111,4 +104,10 @@ public class Advertise : MonoBehaviour
     void RewardedVideoOnAdClickedEvent(IronSourcePlacement placement, IronSourceAdInfo adInfo){
     }
 
+    private void SdkInitializationCompletedEvent()
+    {
+        IronSource.Agent.loadRewardedVideo();
+        Debug.Log ("unity-script: IronSource.Agent.validateIntegration");
+        Debug.Log("SdkInitializationCompletedEvent");
+    }
 }
