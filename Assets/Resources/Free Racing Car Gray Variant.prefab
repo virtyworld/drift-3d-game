@@ -182,9 +182,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28fab9804c910324bb50a7ad4e697810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 5, z: -10}
-  smoothSpeed: 0.125
+  smoothSpeed: 7
   photonView: {fileID: 7101645366964691542}
+  distance: 5
+  height: 2
+  centerOffset: {x: 0, y: 5, z: -10}
+  followOnStart: 1
 --- !u!114 &8244374777662054358
 MonoBehaviour:
   m_ObjectHideFlags: 0

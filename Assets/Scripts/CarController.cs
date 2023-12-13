@@ -78,17 +78,20 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
             UpdateWheelMesh(rearLeftWheelCollider, rearLeftWheelMesh);
             UpdateWheelMesh(rearRightWheelCollider, rearRightWheelMesh);
 
+            float angleToFuturePosition = CalculateAngleToFuturePosition();
+
+            if (Mathf.Abs(angleToFuturePosition) > 40f)
+            {
+                driftPoints++;
+                ShowDriftPoints(driftPoints.ToString());
+            }
+            else
+            {
+                HideDriftPoints();
+            }
+            
             if (Input.GetKey(KeyCode.Space))
             {
-                float timeInSeconds = 1f; 
-
-                Vector3 futurePosition = PredictFuturePosition(timeInSeconds);
-
-                // Вычисление угла поворота задних колес к предсказанной позиции
-                Vector3 directionToFuturePosition = (futurePosition - transform.position).normalized;
-                float angleToFuturePosition =
-                    Vector3.SignedAngle(transform.forward, directionToFuturePosition, transform.up);
-
                 // Определение коэффициента скольжения в зависимости от угла
                 float maxSlipAngle = 360; // Максимальный угол для скольжения
                 float slipCoefficient = Mathf.Clamp01(Mathf.Abs(angleToFuturePosition) / maxSlipAngle);
@@ -98,13 +101,6 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
                 rearFriction.stiffness = Mathf.Lerp(0.1f, 2f, slipCoefficient); // Изменение stiffness
                 rearLeftWheelCollider.sidewaysFriction = rearFriction;
                 rearRightWheelCollider.sidewaysFriction = rearFriction;
-
-                if (Mathf.Abs(angleToFuturePosition) > 20f)
-                {
-                    driftPoints++;
-                }
-
-                ShowDriftPoints(driftPoints.ToString());
             }
             else
             {
@@ -113,7 +109,6 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
                 rearFriction.stiffness = 1f; // Верните stiffness к обычному значению
                 rearLeftWheelCollider.sidewaysFriction = rearFriction;
                 rearRightWheelCollider.sidewaysFriction = rearFriction;
-                HideDriftPoints();
             }
             
             if (Input.GetAxis("Vertical") > 0)
@@ -167,23 +162,6 @@ public class CarController : MonoBehaviourPunCallbacks, IPunObservable
         mesh.rotation = rotation;
     }
 
-    private Vector3 PredictFuturePosition(float time)
-    {
-        Vector3 currentPosition = transform.position; // Текущая позиция машины
-        Vector3 currentVelocity = rb.velocity; // Текущая скорость машины
-        Vector3 currentAngularVelocity = rb.angularVelocity; // Угловая скорость машины
-
-        // Предполагаем, что движение прямолинейное и без ускорения (равномерное движение)
-        Vector3 futurePosition = currentPosition + currentVelocity * time;
-
-        // Учитываем поворот машины
-        Quaternion rotationChange = Quaternion.Euler(currentAngularVelocity * Mathf.Rad2Deg * time);
-        Vector3 direction = rotationChange * transform.forward;
-        Vector3 predictedPositionWithRotation = currentPosition + direction * currentVelocity.magnitude * time;
-
-        return predictedPositionWithRotation;
-    }
-
     private void ShowDriftPoints(string text)
     {
         _lvl.pointText.gameObject.SetActive(true);
@@ -229,5 +207,31 @@ void OnLevelWasLoaded(int level)
 
         GameObject _uiGo = Instantiate(this.PlayerUiPrefab);
         _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
+    }
+    private float CalculateAngleToFuturePosition()
+    {
+        float timeInSeconds = 0.5f;
+        Vector3 futurePosition = PredictFuturePosition(timeInSeconds);
+
+        Vector3 directionToFuturePosition = (futurePosition - transform.position).normalized;
+        float angleToFuturePosition = Vector3.SignedAngle(transform.forward, directionToFuturePosition, transform.up);
+
+        return angleToFuturePosition;
+    }
+    private Vector3 PredictFuturePosition(float time)
+    {
+        Vector3 currentPosition = transform.position; // Текущая позиция машины
+        Vector3 currentVelocity = rb.velocity; // Текущая скорость машины
+        Vector3 currentAngularVelocity = rb.angularVelocity; // Угловая скорость машины
+
+        // Предполагаем, что движение прямолинейное и без ускорения (равномерное движение)
+        Vector3 futurePosition = currentPosition + currentVelocity * time;
+
+        // Учитываем поворот машины
+        Quaternion rotationChange = Quaternion.Euler(currentAngularVelocity * Mathf.Rad2Deg * time);
+        Vector3 direction = rotationChange * transform.forward;
+        Vector3 predictedPositionWithRotation = currentPosition + direction * currentVelocity.magnitude * time;
+
+        return predictedPositionWithRotation;
     }
 }

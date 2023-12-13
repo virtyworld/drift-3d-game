@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -69,38 +68,28 @@ public class Advertise : MonoBehaviour
     {
         HideBanner();
     }
-    
-    
-/************* RewardedVideo AdInfo Delegates *************/
-// Indicates that there’s an available ad.
-// The adInfo object includes information about the ad that was loaded successfully
-// This replaces the RewardedVideoAvailabilityChangedEvent(true) event
+
     void RewardedVideoOnAdAvailable(IronSourceAdInfo adInfo) {
         bool available = IronSource.Agent.isRewardedVideoAvailable();
         Debug.Log("RewardedVideoOnAdAvailable "+available);
     }
-// Indicates that no ads are available to be displayed
-// This replaces the RewardedVideoAvailabilityChangedEvent(false) event
+
     void RewardedVideoOnAdUnavailable() {
     }
-// The Rewarded Video ad view has opened. Your activity will loose focus.
+
     void RewardedVideoOnAdOpenedEvent(IronSourceAdInfo adInfo){
     }
-// The Rewarded Video ad view is about to be closed. Your activity will regain its focus.
+
     void RewardedVideoOnAdClosedEvent(IronSourceAdInfo adInfo){
     }
-// The user completed to watch the video, and should be rewarded.
-// The placement parameter will include the reward data.
-// When using server-to-server callbacks, you may ignore this event and wait for the ironSource server callback.
+
     void RewardedVideoOnAdRewardedEvent(IronSourcePlacement placement, IronSourceAdInfo adInfo){
         Debug.Log("RewardedVideoOnAdRewardedEvent");
     }
-// The rewarded video ad was failed to show.
+
     void RewardedVideoOnAdShowFailedEvent(IronSourceError error, IronSourceAdInfo adInfo){
     }
-// Invoked when the video ad was clicked.
-// This callback is not supported by all networks, and we recommend using it only if
-// it’s supported by all networks you included in your build.
+
     void RewardedVideoOnAdClickedEvent(IronSourcePlacement placement, IronSourceAdInfo adInfo){
     }
 
@@ -111,3 +100,90 @@ public class Advertise : MonoBehaviour
         Debug.Log("SdkInitializationCompletedEvent");
     }
 }
+//   TODO erroe when android resolve
+// Gradle failed to fetch dependencies.
+//
+// Failed to run 'C:\Users\dima\unityProject\Drift 3D game\Temp\PlayServicesResolverGradle\gradlew.bat --no-daemon -b "C:\Users\dima\unityProject\Drift 3D game\Temp\PlayServicesResolverGradle\PlayServicesResolver.scripts.download_artifacts.gradle" "-PANDROID_HOME=C:/Program Files/Unity/Hub/Editor/2022.3.12f1/Editor/Data/PlaybackEngines/AndroidPlayer\SDK" "-PTARGET_DIR=C:\Users\dima\unityProject\Drift 3D game\Assets\Plugins\Android" "-PMAVEN_REPOS=https://android-sdk.is.com/;https://maven.google.com/" "-PPACKAGES_TO_COPY=com.ironsource.sdk:mediationsdk:7.6.0;com.google.android.gms:play-services-ads-identifier:18.0.1;com.google.android.gms:play-services-basement:18.1.0;com.ironsource.adapters:unityadsadapter:4.3.34;com.unity3d.ads:unity-ads:4.9.2" "-PUSE_JETIFIER=1" "-PDATA_BINDING_VERSION=7.1.2"'
+// stdout:
+//
+// > Configure project :
+// ANDROID_HOME: C:/Program Files/Unity/Hub/Editor/2022.3.12f1/Editor/Data/PlaybackEngines/AndroidPlayer\SDK
+// MAVEN_REPOS: name=Google url=https://dl.google.com/dl/android/maven2/
+// MAVEN_REPOS: name=maven url=https://dl.google.com/dl/android/maven2/
+// MAVEN_REPOS: name=maven2 url=https://maven.google.com/
+// MAVEN_REPOS: name=maven3 url=https://android-sdk.is.com/
+// MAVEN_REPOS: name=MavenLocal url=file:/C:/Users/dima/.m2/repository/
+// MAVEN_REPOS: name=BintrayJCenter url=https://jcenter.bintray.com/
+// MAVEN_REPOS: name=MavenRepo url=https://repo.maven.apache.org/maven2/
+// PACKAGES_TO_COPY: com.ironsource.sdk:mediationsdk:7.6.0
+// PACKAGES_TO_COPY: com.google.android.gms:play-services-ads-identifier:18.0.1
+// PACKAGES_TO_COPY: com.google.android.gms:play-services-basement:18.1.0
+// PACKAGES_TO_COPY: com.ironsource.adapters:unityadsadapter:4.3.34
+// PACKAGES_TO_COPY: com.unity3d.ads:unity-ads:4.9.2
+// TARGET_DIR: C:\Users\dima\unityProject\Drift 3D game\Assets\Plugins\Android
+// Resolution attempt 1: packages [com.google.android.gms:play-services-ads-identifier:18.0.1, com.google.android.gms:play-services-basement:18.1.0, com.unity3d.ads:unity-ads:4.9.2, com.ironsource.adapters:unityadsadapter:4.3.34, com.ironsource.sdk:mediationsdk:7.6.0]
+// androidx.asynclayoutinflater:asynclayoutinflater conflicting due to package(s):
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.asynclayoutinflater:asynclayoutinflater:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.asynclayoutinflater:asynclayoutinflater:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-base:18.0.1/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.asynclayoutinflater:asynclayoutinflater:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-base:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.asynclayoutinflater:asynclayoutinflater:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-base:18.0.1/com.google.android.gms:play-services-tasks:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.asynclayoutinflater:asynclayoutinflater:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.asynclayoutinflater:asynclayoutinflater:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-tasks:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.asynclayoutinflater:asynclayoutinflater:1.0.0
+// androidx.coordinatorlayout:coordinatorlayout conflicting due to package(s):
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.coordinatorlayout:coordinatorlayout:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.coordinatorlayout:coordinatorlayout:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-base:18.0.1/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.coordinatorlayout:coordinatorlayout:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-base:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.coordinatorlayout:coordinatorlayout:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-base:18.0.1/com.google.android.gms:play-services-tasks:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.coordinatorlayout:coordinatorlayout:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.coordinatorlayout:coordinatorlayout:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-tasks:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.coordinatorlayout:coordinatorlayout:1.0.0
+// androidx.core:core conflicting due to package(s):
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.core:core:1.2.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.asynclayoutinflater:asynclayoutinflater:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.coordinatorlayout:coordinatorlayout:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.coordinatorlayout:coordinatorlayout:1.0.0/androidx.customview:customview:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.customview:customview:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.drawerlayout:drawerlayout:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.drawerlayout:drawerlayout:1.0.0/androidx.customview:customview:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.legacy:legacy-support-core-utils:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.legacy:legacy-support-core-utils:1.0.0/androidx.loader:loader:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.slidingpanelayout:slidingpanelayout:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.slidingpanelayout:slidingpanelayout:1.0.0/androidx.customview:customview:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.swiperefreshlayout:swiperefreshlayout:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.viewpager:viewpager:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.viewpager:viewpager:1.0.0/androidx.customview:customview:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-utils:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-utils:1.0.0/androidx.loader:loader:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-ads-identifier:18.0.1/com.google.android.gms:play-services-basement:18.0.0/androidx.fragment:fragment:1.0.0/androidx.loader:loader:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.core:core:1.2.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.asynclayoutinflater:asynclayoutinflater:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.coordinatorlayout:coordinatorlayout:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.coordinatorlayout:coordinatorlayout:1.0.0/androidx.customview:customview:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.customview:customview:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.drawerlayout:drawerlayout:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.drawerlayout:drawerlayout:1.0.0/androidx.customview:customview:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.legacy:legacy-support-core-utils:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.legacy:legacy-support-core-utils:1.0.0/androidx.loader:loader:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.slidingpanelayout:slidingpanelayout:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.slidingpanelayout:slidingpanelayout:1.0.0/androidx.customview:customview:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.swiperefreshlayout:swiperefreshlayout:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.viewpager:viewpager:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.viewpager:viewpager:1.0.0/androidx.customview:customview:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-utils:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-utils:1.0.0/androidx.loader:loader:1.0.0/androidx.core:core:1.0.0
+// - com.google.android.gms:play-services-basement:18.1.0/androidx.fragment:fragment:1.0.0/androidx.loader:loader:1.0.0/androidx.core:core:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/androidx.activity:activity-ktx:1.7.1/androidx.activity:activity:[1.7.1]/androidx.core:core:1.8.0
+// - com.unity3d.ads:unity-ads:4.9.2/androidx.activity:activity-ktx:1.7.1/androidx.activity:activity:[1.7.1]/androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1/androidx.core:core-ktx:1.2.0/androidx.core:core:1.9.0
+// - com.unity3d.ads:unity-ads:4.9.2/androidx.activity:activity-ktx:1.7.1/androidx.core:core-ktx:1.1.0/androidx.core:core:1.9.0
+// - com.unity3d.ads:unity-ads:4.9.2/androidx.core:core-ktx:1.9.0/androidx.core:core:1.9.0
+// - com.unity3d.ads:unity-ads:4.9.2/androidx.webkit:webkit:1.6.1/androidx.core:core:1.1.0
+// - com.unity3d.ads:unity-ads:4.9.2/androidx.work:work-runtime-ktx:2.7.0/androidx.work:work-runtime:[2.7.0]/androidx.core:core:1.6.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-base:18.0.1/androidx.core:core:1.2.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-base:18.0.1/androidx.fragment:fragment:1.0.0/androidx.core:core:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.google.android.gms:play-services-base:18.0.1/androidx.fragment:fragment:1.0.0/androidx.legacy:legacy-support-core-ui:1.0.0/androidx.asynclayoutinflater:asynclayoutinflater:1.0.0/androidx.core:core:1.0.0
+// - com.unity3d.ads:unity-ads:4.9.2/com.google.android.gms:play-services-cronet:18.0.1/com.g<message truncated>

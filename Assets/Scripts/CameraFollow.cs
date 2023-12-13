@@ -3,22 +3,65 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Vector3 offset = new Vector3(0f, 5f, -10f); // Смещение камеры относительно машины
-    public float smoothSpeed = 0.125f; 
-    public PhotonView photonView; 
+    [SerializeField] private float smoothSpeed = 0.125f;
+    [SerializeField] private PhotonView photonView;
+    [SerializeField] private float distance = 7.0f;
+    [SerializeField] private float height = 3.0f;
+    [SerializeField] private Vector3 centerOffset = Vector3.zero;
+    [SerializeField] private bool followOnStart = true;
+
+    private Vector3 cameraOffset = Vector3.zero;
+    private Transform cameraTransform;
+    private bool isFollowing;
     
-    void FixedUpdate()
+    private void Start()
+    {
+        // Start following the target if wanted.
+        if (followOnStart)
+        {
+            OnStartFollowing();
+        }
+    }
+    
+    private void FixedUpdate()
     {
         if (photonView.IsMine)
         {
-            // Получаем позицию, куда должна двигаться камера (позиция машины с учетом смещения)
-            Vector3 targetPosition = gameObject.transform.position + offset;
-
-            // Плавно перемещаем позицию камеры к новой позиции
-            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, targetPosition, smoothSpeed);
-
-            // Направляем камеру на машину
-            Camera.main.transform.LookAt(gameObject.transform); 
+            if (cameraTransform == null && isFollowing)
+            {
+                OnStartFollowing();
+            }
+        
+            // only follow is explicitly declared
+            if (isFollowing)
+            {
+                Follow();
+            }
         }
+    }
+    private void Follow()
+    {
+        cameraOffset.z = -distance;
+        cameraOffset.y = height;
+
+        cameraTransform.position = Vector3.Lerp(cameraTransform.position,
+            this.transform.position + this.transform.TransformVector(cameraOffset), smoothSpeed * Time.deltaTime);
+
+        cameraTransform.LookAt(this.transform.position + centerOffset);
+    }
+    private void OnStartFollowing()
+    {
+        cameraTransform = Camera.main.transform;
+        isFollowing = true;
+        Cut();
+    }
+    private void Cut()
+    {
+        cameraOffset.z = -distance;
+        cameraOffset.y = height;
+
+        cameraTransform.position = this.transform.position + this.transform.TransformVector(cameraOffset);
+
+        cameraTransform.LookAt(this.transform.position + centerOffset);
     }
 }

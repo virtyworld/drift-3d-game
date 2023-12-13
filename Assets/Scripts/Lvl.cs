@@ -15,7 +15,7 @@ public class Lvl : MonoBehaviourPunCallbacks
     [SerializeField] public Button leaveButton;
 
     private float countdownTimer = 5f;
-    private float gameTimer = 5f; 
+    private float gameTimer = 120f; 
     private bool gameStarted;
     private bool isControlEnabled;
     private CarController _carController;

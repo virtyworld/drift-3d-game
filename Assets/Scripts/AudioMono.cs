@@ -12,8 +12,9 @@ public class AudioMono : MonoBehaviour
 
     private void Start()
     {
-        slider.value = PlayerPrefs.GetFloat(PlayerPrefsVariables.voume.ToString(), 0.395f);
-        audioSource.volume = slider.value;
+        audioSource.volume =  PlayerPrefs.GetFloat(PlayerPrefsVariables.voume.ToString(), 0.395f);
+       
+        if (slider!=null) slider.value = audioSource.volume ;
     }
 
     private void FixedUpdate()
@@ -34,7 +35,7 @@ public class AudioMono : MonoBehaviour
 
     private void ChangeVolume()
     {
-        if (audioSource.volume!=slider.value)
+        if (slider!=null && audioSource.volume!=slider.value)
         {
             audioSource.volume = slider.value;
             SaveSettings();

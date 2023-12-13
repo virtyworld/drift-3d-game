@@ -177,6 +177,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         if (int.TryParse(maxPlayersPerRoom.text, out int maxPlayers) && maxPlayers > 0)
         {
+            if (maxPlayers > 20) maxPlayers = 20;
+           
             RoomOptions roomOptions = new RoomOptions();
             roomOptions.MaxPlayers = maxPlayers;
 
