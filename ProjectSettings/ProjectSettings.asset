@@ -159,6 +159,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.DefaultCompany.Drift3Dgame
+    Standalone: com.DefaultCompany.Drift-3D-game
   buildNumber:
     Standalone: 0
     VisionOS: 0
