@@ -10,37 +10,35 @@ namespace CarGame
         private readonly EcsCustomInject<GameData> gameData = default;
         private CarMono _carMono;
         private EcsWorld world;
-       
-        
+        private EcsFilter lvlFilter;
+
         public void Init(IEcsSystems systems)
         {
             world = systems.GetWorld();
-            
+
             InitCar();
-            InitEntity();
+           
         }
 
-        private void InitEntity()
-        {
-            if (_carMono.photonViewScript.IsMine)
-            {
-                world.GetPool<Car>().Add(world.NewEntity());
-            }
-        }
+
         private void InitCar()
         {
-            int carIndex = PlayerPrefs.GetInt(PlayerPrefsVariables.playerChoosenCar.ToString(), 0);
+            lvlFilter = world.Filter<Lvl>().End();
             
+            int carIndex = PlayerPrefs.GetInt(PlayerPrefsVariables.playerChoosenCar.ToString(), 0);
+
             if (gameData.Value.configuration.carSettings.carData[carIndex].prefab != null)
             {
                 if (PlayerManager.LocalPlayerInstance == null)
                 {
                     Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
-                    GameObject car = PhotonNetwork.Instantiate(gameData.Value.configuration.carSettings.carData[carIndex].prefab.name,
+                    GameObject car = PhotonNetwork.Instantiate(
+                        gameData.Value.configuration.carSettings.carData[carIndex].prefab.name,
                         new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
                     _carMono = car.GetComponent<CarMono>();
-                   
-                    SetPlayeCustomizeSettings();
+
+                    InitEntity(_carMono);
+                    SetPlayerCustomizeSettings();
                 }
                 else
                 {
@@ -48,13 +46,13 @@ namespace CarGame
                 }
             }
         }
-        
-        private void SetPlayeCustomizeSettings()
+
+        private void SetPlayerCustomizeSettings()
         {
             SetCarColor();
             SetSpoiler();
         }
-        
+
         private void SetCarColor()
         {
             int color = PlayerPrefs.GetInt(PlayerPrefsVariables.playerColorChoosen.ToString(), 0);
@@ -87,6 +85,26 @@ namespace CarGame
             {
                 _carMono.spoiler.gameObject.SetActive(true);
             }
+        }
+
+        private void InitEntity(CarMono _carMono)
+        {
+            if (_carMono.photonViewScript.IsMine)
+            {
+                ref Car car = ref world.GetPool<Car>().Add(world.NewEntity());
+                car.lvlEntity = world.PackEntity(GetLvlEntity());
+                car.carMonoRef = _carMono;
+            }
+        }
+
+        private int GetLvlEntity()
+        {
+            foreach (int lvlEntity in lvlFilter)
+            {
+                return lvlEntity;
+            }
+
+            return 0;
         }
     }
 }

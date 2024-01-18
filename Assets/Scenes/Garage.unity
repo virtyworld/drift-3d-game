@@ -384,7 +384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9f848dbf86a37e40ad2555ce5d4d352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carSettings: {fileID: 11400000, guid: c84be7ca86b5441408aa7854361ec6a5, type: 2}
+  carSettings: {fileID: 11400000, guid: c92b1ee0649b1ac44b1d2ad6b7d2f6c4, type: 2}
   carDirectoryToSpawn: {fileID: 863589343}
   redCarButton: {fileID: 799857935}
   blueCarButton: {fileID: 514256819}

@@ -138,7 +138,7 @@ public class CarMono : MonoBehaviourPunCallbacks, IPunObservable
 #endif
     }
 
-    private void UpdateWheelMesh(WheelCollider collider, Transform mesh)
+    public void UpdateWheelMesh(WheelCollider collider, Transform mesh)
     {
         Vector3 position;
         Quaternion rotation;
@@ -183,7 +183,7 @@ void OnLevelWasLoaded(int level)
         GameObject _uiGo = Instantiate(this.PlayerUiPrefab);
         _uiGo.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
     }
-    private float CalculateAngleToFuturePosition()
+    public float CalculateAngleToFuturePosition()
     {
         float timeInSeconds = 0.5f;
         Vector3 futurePosition = PredictFuturePosition(timeInSeconds);

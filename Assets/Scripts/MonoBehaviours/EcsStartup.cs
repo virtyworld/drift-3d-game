@@ -7,10 +7,8 @@ namespace CarGame
     sealed class EcsStartup : MonoBehaviour
     {
         [SerializeField] private Configuration configuration;
-        [SerializeField] private Camera mainCamera;
         [SerializeField] public Transform trackDir;
-        [SerializeField] public Transform carsDir;
-        
+
         private EcsWorld ecsWorld;
         private IEcsSystems initSystems;
         private IEcsSystems updateSystems;
@@ -31,9 +29,7 @@ namespace CarGame
                 // .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ("events"))
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
 #endif
-                .Add(new LvlSpawnSystem())
                 .Add(new CarSpawnSystem())
-                .Add(new CarMoveSystem())
                 .Inject(gameData);
 
             initSystems.Init();
@@ -44,7 +40,9 @@ namespace CarGame
             // updateSystems.Init();
 
             fixedUpdateSystems = new EcsSystems(ecsWorld)
-                .Add(new CarSystem())
+                .Add(new LvlSystem())
+                .Add(new CarMoveSystem())
+                .Add(new AudioSystem())
                 .Inject(gameData);
 
 

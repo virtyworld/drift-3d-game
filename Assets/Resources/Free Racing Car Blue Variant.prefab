@@ -206,6 +206,7 @@ MonoBehaviour:
   rearRightWheelMesh: {fileID: 5094730467380696674}
   rb: {fileID: 3374474453900846415}
   spoiler: {fileID: 2642973474072782128}
+  _lvl: {fileID: 0}
   motorTorque: 1500
   brakeTorque: 500
   maxSteeringAngle: 30
