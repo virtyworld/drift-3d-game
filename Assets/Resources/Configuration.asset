@@ -15,3 +15,4 @@ MonoBehaviour:
   mapSettings: {fileID: 11400000, guid: 98ac45df7c58bdd4982354ca92ecee43, type: 2}
   carSettings: {fileID: 11400000, guid: c84be7ca86b5441408aa7854361ec6a5, type: 2}
   audioSettings: {fileID: 11400000, guid: a5178fcda7e486248aa19542dfe43895, type: 2}
+  lvlMomoPrefab: {fileID: 304718437663473640, guid: b9d09786721af444a9b05c2e16cf20eb, type: 3}

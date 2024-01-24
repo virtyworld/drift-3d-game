@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace CarGame
@@ -8,5 +9,6 @@ namespace CarGame
         public MapSettings mapSettings;
         public CarSettings carSettings;
         public AudioSettings audioSettings;
+        public GameObject lvlMomoPrefab;
     }
 }

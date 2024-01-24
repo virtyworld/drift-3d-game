@@ -1,5 +1,7 @@
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
+using Leopotam.EcsLite.Unity.Ugui;
+using TMPro;
 using UnityEngine;
 
 namespace CarGame
@@ -8,6 +10,8 @@ namespace CarGame
     {
         [SerializeField] private Configuration configuration;
         [SerializeField] public Transform trackDir;
+        [SerializeField] EcsUguiEmitter _uguiEmitter;
+        [SerializeField] TextMeshProUGUI textTimer;
 
         private EcsWorld ecsWorld;
         private IEcsSystems initSystems;
@@ -22,6 +26,7 @@ namespace CarGame
             GameData gameData = new GameData();
             gameData.trackDir = trackDir;
             gameData.configuration = configuration;
+            gameData.textTimer = textTimer;
 
             initSystems = new EcsSystems(ecsWorld)
 #if UNITY_EDITOR
@@ -29,15 +34,18 @@ namespace CarGame
                 // .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ("events"))
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
 #endif
+                .Add(new LvlSpawnSystem())
                 .Add(new CarSpawnSystem())
                 .Inject(gameData);
 
             initSystems.Init();
 
-            // updateSystems = new EcsSystems(ecsWorld)
-            //     .Inject(gameData);
+            updateSystems = new EcsSystems(ecsWorld)
+                .Add(new GUISystem())
+                .AddWorld(new EcsWorld(), "ugui-events")
+                .InjectUgui(_uguiEmitter, "ugui-events");
 
-            // updateSystems.Init();
+            updateSystems.Init();
 
             fixedUpdateSystems = new EcsSystems(ecsWorld)
                 .Add(new LvlSystem())
@@ -56,10 +64,10 @@ namespace CarGame
             // lateUpdateSystems.Init();
         }
 
-        // private void Update()
-        // {
-        //     updateSystems.Run();
-        // }
+        private void Update()
+        {
+            updateSystems.Run();
+        }
 
         private void FixedUpdate()
         {
@@ -74,6 +82,7 @@ namespace CarGame
         private void OnDestroy()
         {
             initSystems.Destroy();
+            updateSystems.GetWorld("ugui-events").Destroy();
             updateSystems.Destroy();
             fixedUpdateSystems.Destroy();
             // lateUpdateSystems.Destroy();

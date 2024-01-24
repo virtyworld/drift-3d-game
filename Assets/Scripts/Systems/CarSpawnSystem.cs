@@ -15,16 +15,14 @@ namespace CarGame
         public void Init(IEcsSystems systems)
         {
             world = systems.GetWorld();
-
+            lvlFilter = world.Filter<Lvl>().End();
+            
             InitCar();
-           
         }
 
 
         private void InitCar()
         {
-            lvlFilter = world.Filter<Lvl>().End();
-            
             int carIndex = PlayerPrefs.GetInt(PlayerPrefsVariables.playerChoosenCar.ToString(), 0);
 
             if (gameData.Value.configuration.carSettings.carData[carIndex].prefab != null)

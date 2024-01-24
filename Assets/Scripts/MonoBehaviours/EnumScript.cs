@@ -28,3 +28,8 @@ public enum CarColor
     black
 }
 
+public enum ButtonName
+{
+    LeaveFromRace
+}
+

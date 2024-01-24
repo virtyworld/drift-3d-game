@@ -20,7 +20,8 @@ namespace CarGame
         {
             carPool = world.GetPool<Car>();
             carFilter = world.Filter<Car>().End();
-
+            lvlPool = world.GetPool<Lvl>();
+            
             Move();
         }
 

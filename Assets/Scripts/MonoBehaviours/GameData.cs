@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace CarGame
@@ -6,5 +7,6 @@ namespace CarGame
     {
         public Configuration configuration;
         public Transform trackDir;
+        public TextMeshProUGUI textTimer;
     }
 }
